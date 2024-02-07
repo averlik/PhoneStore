@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Phone>
+
+@{
+    ViewData["Title"] = "Управление каталогом товаров";
+}
+
+<p style="margin-left: 20px;">
+    <a asp-action="Create">Создать новый товар</a>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Название</th>
+            <th>Цена</th>
+            <th>Бренд</th>
+            <th>Изображение</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Price.ToString() руб.
+            </td>
+            <td>
+                    @item.Brand.BrandName
+            </td>
+                <td>
+                    @if (string.IsNullOrEmpty(item.Image))
+                    {
+                        <img src="/images/noimage.jpg" width="100" alt="" />
+                    }
+                    else
+                    {
+                        <img src="/images/@item.Image" width="100" alt="" />
+                    }
+                </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="confirmDeletion">Удалить</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<div class="d-flex w-100 justify-content-center">
+    <pagination page-count="@ViewBag.TotalPages"
+                page-target="/admin/products/@ViewBag.BrandSlug"
+                page-number="@ViewBag.PageNumber"
+                page-range="@ViewBag.PageRange">
+    </pagination>
+</div>
+

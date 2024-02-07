@@ -1,0 +1,49 @@
+﻿@model Phone
+
+@{
+    ViewData["Title"] = @Model.Name;
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-6">
+            <div class="card">
+                <div class="row g-0">
+                    <div class="col-md-6">
+                        @if (string.IsNullOrEmpty(@Model.Image))
+                        {
+                            <img style="max-height: 280px;max-width: 280px;  object-fit: cover; object-position: center;" src="/images/noimage.jpg" class="card-img-top" alt="...">
+                        }
+                        else
+                        {
+                            <img src="/images/@Model.Image" class="card-img" alt="@Model.Name" style="max-height: 280px;max-width: 280px;  object-fit: cover; object-position: center;">
+                        }
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <h4 class="card-title">@Model.Name</h4>
+                            <p class="card-text"><strong>Бренд: </strong>@Model.Brand.BrandName</p>
+                            <p class="card-text">@Html.Raw(Model.Description)</p>
+                            <p class="card-text"><strong>Цена: </strong>@Model.Price.ToString() руб.</p>
+                           
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <td>
+                                    <a class="btn btn-outline-primary" asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@Model.Id">Редактировать</a>
+                                </td>
+                            }
+                            else
+                            {
+                                <a class="btn btn-outline-primary" asp-controller="Cart" asp-action="Add" asp-route-id="@Model.Id">Добавить в корзину</a>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p></p>
+<a asp-controller="Home" asp-action="Index" class="row justify-content-center">Вернуться на главную</a>
+

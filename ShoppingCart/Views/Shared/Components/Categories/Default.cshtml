@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Brand>
+
+
+<ul class="navbar-nav me-auto">
+    @foreach (var item in Model)
+    {
+        <li>
+            <a class="nav-link @IsActiveCategory(item.Slug, ViewBag.CurrentCategorySlug)" asp-controller="Phones" asp-action="Index" asp-route-brandSlug="@item.Slug">@item.BrandName</a>
+        </li>
+    }
+</ul>
+
+@functions {
+    private string IsActiveCategory(string brandSlug, string currentCategorySlug)
+    {
+        return (brandSlug == currentCategorySlug) ? "text-primary" : "text-dark";
+    }
+}

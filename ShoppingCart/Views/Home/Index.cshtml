@@ -1,0 +1,97 @@
+﻿@model PhoneStore.Models.ViewModels.PhoneViewModel
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<form asp-controller="Home" asp-action="Index" method="get" class="row row-cols-lg-auto g-3 align-items-center">
+    <div class="col-12">
+        <label class="visually-hidden" for="brandId">Brands</label>
+        <select class="form-select" id="brandId" name="brandId">
+            <option selected>Выберите бренд</option>
+            @foreach (var brand in Model.Brands)
+            {
+                <option selected="@(brand.Id == Model.BrandId)" value="@brand.Id">@brand.BrandName</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-12">
+        <label class="visually-hidden" for="sortOrder">Сортировка</label>
+        <select class="form-select" id="sortOrder" name="sortOrder">
+            <option selected>Сортировать</option>
+            <option value="price_asc" selected="@("price_asc" == Model.SortOrder)">По возрастанию цены</option>
+            <option value="price_desc" selected="@("price_desc" == Model.SortOrder)">По убыванию цены</option>
+        </select>
+    </div>
+
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Поиск</button>
+        <a href="/Home/Index" class="btn btn-primary">Очистить</a>
+    </div>
+</form>
+ <br></br>
+
+<div class=" w-100 d-flex flex-wrap">
+    <div class="row">
+        @foreach (var item in Model.Phones)
+        {
+            <div class="card mx-2 mb-4" style="width: 16rem;">
+
+                    @if (string.IsNullOrEmpty(item.Image))
+                    {
+                        <img style="width:100%; height:230px" src="/images/noimage.jpg" class="card-img-top" alt="...">
+                    }
+                    else
+                    {
+                        <img style="width:100%; height:230px" src="/images/@item.Image" class="card-img-top" alt="...">
+                    }
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text">
+                        <b>Brand: </b>@item.Brand.BrandName<br />
+                        <b>Price: </b>@item.Price pуб<br />
+                    </p>
+                    </div>
+                     <div class="card-footer text-center">
+                    @if (!User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-primary mx-auto" asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id">Добавить в корзину</a>
+                        <p></p>
+                    }
+                    
+                          <a class="btn btn-primary mx-auto" asp-controller="Products" asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
+                    </div>
+
+                
+            </div>
+           
+        }
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        async function add(phoneId) {
+            var usernameEl = document.getElementById("username");
+            if (usernameEl == null) {
+                window.location.href = "/Identity/Account/Login";
+            }
+            try {
+                var response = await fetch(`/Cart/AddItem?phoneId=${phoneId}`);
+                if (response.status == 200) {
+                    var result = await response.json();
+                    var cartCountEl = document.getElementById("cartCount");
+                    cartCountEl.innerHTML = result;
+                    window.location.href = "#cartCount";
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+        }
+    </script>
+}
+
+
+
+

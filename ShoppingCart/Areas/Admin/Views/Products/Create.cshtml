@@ -1,0 +1,78 @@
+﻿@model PhoneStore.Models.Phone
+
+@{
+    ViewData["Title"] = "Добавление нового товара";
+}
+
+<h1>Добавление нового товара</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <p>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Название товара</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </p>
+
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <p>
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label">Цена</label>
+                    <input asp-for="Price" class="form-control" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+            </p>
+            <p>
+                <div class="form-group">
+                    <label>Бренд</label>
+                    <select asp-for="BrandId" class="form-control" asp-items="ViewBag.Brands">
+                        <option value="0">Выберите бренд</option>
+                    </select>
+                    <span asp-validation-for="BrandId" class="text-danger"></span>
+                </div>
+            </p>
+            <p>
+                <div class="form-group">
+                    <label asp-for="ImageUpload" class="control-label">Изображение товара</label>
+                    <input type="file" asp-for="ImageUpload" class="form-control" />
+                    <p><img id="imgpreview" class="img-thumbnail pt-2" style="max-width: 160px; max-height: 160px; margin-top: 10px;" /> </p>
+                    <span asp-validation-for="ImageUpload" class="text-danger"></span>
+                </div>
+            </p>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-outline-primary m-2">Создать новый товар</button>
+            </div>
+            <p></p>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a style="margin-left: 10px;"  asp-action="Index">Назад</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="https://cdn.ckeditor.com/4.19.0/standard/ckeditor.js"></script>
+    <script>
+        $("#ImageUpload").change(function () {
+            readURL(this);
+        });
+
+        CKEDITOR.replace('Description');
+    </script>
+}

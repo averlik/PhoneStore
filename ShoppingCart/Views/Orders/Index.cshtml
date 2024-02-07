@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Order>
+
+@{
+    ViewData["Title"] = "Мои заказы";
+    int orderNumber = 1;
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Мои заказы</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Вы еще ничего не заказывали</div>
+    }
+    else
+    {
+        @foreach (var order in Model)
+        {
+            <div class="card mb-3">
+                <div class="card-header bg-primary text-white">
+                    Заказ #@orderNumber - <small>@order.OrderDate.ToString("dd MMM yyyy HH:mm:ss")</small>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Итого: @order.TotalPrice руб.</h5>
+                    <p class="card-text">
+                        <strong>Товары:</strong>
+                        <ul>
+                            @foreach (var item in order.OrderItems)
+                            {
+                                <li>@item.Phone.Name - @item.Quantity x @item.Price руб.</li>
+                            }
+                        </ul>
+                    </p>
+                    <a href="@Url.Action("Details", "Orders", new { id = order.Id })" class="btn btn-outline-primary">Подробнее</a>
+                </div>
+            </div>
+            orderNumber++;
+        }
+    }
+</div>

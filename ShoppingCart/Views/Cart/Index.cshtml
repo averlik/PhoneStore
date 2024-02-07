@@ -1,0 +1,73 @@
+﻿@model CartViewModel
+
+@{
+    ViewData["Title"] = "Просмотр корзины";
+}
+
+<div style="width:90%;margin:auto" class="mt-2">
+        <div class="col-md-8">
+         <p></p>
+        <h3>Корзина</h3>
+        <p></p>
+
+            @if (Model.CartItems.Count > 0)
+            {
+                <table class="table table-striped">
+            <tr>
+                <th></th>
+                <th>Товар</th>
+                <th>Цена за ед.т.</th>
+                <th>Итоговая цена</th>
+                <th>Редактировать</th>
+            </tr>
+                @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>
+                        @if (string.IsNullOrEmpty(item.Image))
+                        {
+                            <img src="/images/noimage.jpg" style="width:100px;height:100px" />
+                        }
+                        else
+                        {
+                            <img src="/images/@item.Image" style="width:100px;height:100px" />
+                        }
+                    </td>
+                    <td>@item.PhoneName</td>
+                    <td>@item.Price X @item.Quantity</td>
+                    <td>@(item.Price * item.Quantity) руб</td>
+                    
+                    <td>
+                            <a class="btn btn-primary" asp-action="Add" asp-route-id="@item.PhoneId">+</a>
+                            <a class="btn btn-primary" asp-action="Decrease" asp-route-id="@item.PhoneId">-</a>
+                    </td>
+                </tr>
+            }
+            </table>
+            <div class="my-2">
+                <h5>Итого: </h5>
+                @(Model.CartItems.Select(item => item.Price * item.Quantity).Sum()) руб
+            </div>
+
+            <div>
+                 <td class="text-center" colspan="6">
+                      <div class="btn-group">
+                          <a class="btn btn-outline-primary m-2" asp-action="Clear">Очистить корзину</a>
+                          <form method="post" asp-controller="Orders" asp-action="Create">
+                              <button class="btn btn-outline-primary m-2" type="submit">Оформить заказ</button>
+                          </form>
+                      </div>
+                 </td>
+            </div>
+            }
+            else
+            {
+                <div class="col-md-8">
+                    <p></p>
+                    <h3>Ваша корзина пуста</h3>
+                    <p></p>
+                 </div>
+            }
+        </div>
+ </div>
+

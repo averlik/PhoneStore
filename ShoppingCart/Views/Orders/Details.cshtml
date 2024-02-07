@@ -1,0 +1,42 @@
+﻿@model Order
+
+@{
+    ViewData["Title"] = $"Подробности заказа - {Model.Id}";
+}
+<div style="width:90%;margin:auto" class="mt-2">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <p><h2 class="text-center">Подробности заказа</h2></p>
+            <p class="text-center">Дата заказа: @Model.OrderDate.ToShortDateString()</p>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">Товары:</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>Изображение</th>
+                        <th>Количество</th>
+                        <th>Цена</th>
+                        <th>Общая стоимость</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <tr>
+                            <td>@item.Phone.Name</td>
+                            <td><img src="/images/@item.Phone.Image" width="200" height="200" alt="@item.Phone.Name" /></td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price руб.</td>
+                            <td>@(item.Quantity * item.Price) руб.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <p><strong>Итого:</strong> @Model.TotalPrice руб.</p>
+        </div>
+    </div>
+</div>
